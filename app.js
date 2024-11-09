@@ -2,10 +2,17 @@ const express = require("express");
 const app = express();
 const PORT = 8080;
 
-// Middleware para parsear JSON
 app.use(express.json());
 
-// Servidor escuchando en el puerto 8080
+// Importar los routers
+const productsRouter = require("./routes/products");
+app.use("/api/products", productsRouter);
+const cartsRouter = require("./routes/carts");
+
+// Definir las rutas
+app.use("/products", productsRouter);
+app.use("/carts", cartsRouter);
+
 app.listen(PORT, () => {
 	console.log(`Servidor escuchando en http://localhost:${PORT}`);
 });
