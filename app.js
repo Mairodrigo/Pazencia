@@ -1,7 +1,9 @@
-const express = require("express");
+import express from "express";
+import routerProducts from "./routes/products.js";
+import routerCart from "./routes/carts.js";
+
 const app = express();
-const productsRouter = require("./routes/products");
-const cartsRouter = require("./routes/carts");
+
 
 // Middleware para procesar JSON
 app.use(express.json());
