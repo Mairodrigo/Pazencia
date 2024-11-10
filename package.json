@@ -1,15 +1,21 @@
 {
-  "name": "pazencia",
-  "version": "1.0.0",
-  "description": "X",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "keywords": [],
-  "author": "Mailen Rodrigo",
-  "license": "ISC",
-  "dependencies": {
-    "express": "^4.21.1"
-  }
+	"name": "pazencia",
+	"version": "1.0.0",
+	"description": "X",
+	"main": "src/app.js",
+	"type": "module",
+	"scripts": {
+		"start": "node --no-warnings ./src/app.js",
+		"dev": "nodemon ./src/app.js",
+		"stop-linux": "killall -9 node",
+		"stop-windows": "taskkill /F /IM node.exe",
+		"lint": "eslint ./src --fix"
+	},
+	"keywords": [],
+	"author": "Mailen Rodrigo",
+	"license": "MIT",
+	"dependencies": {
+		"express": "^4.21.1",
+		"moment": "^2.30.1"
+	}
 }
