@@ -1,77 +1,70 @@
-const express = require("express");
-const fs = require("fs").promises;
-const router = express.Router();
+import { Router } from "express";
+import CartManager from "../manager/cartManager.js";
 
-const carritosPath = "./files/carritos.json"; // Ruta donde se almacenarán los carritos
+const router = Router();
+const cartManager = new CartManager();
 
-//Generar carrito con ID unico y array vacio de productos. ID autogenerado
+// Ruta para obtener todos los carritos
+router.get("/", async (req, res) => {
+	try {
+		const carts = await cartManager.getAll(req.query);
+		res.status(200).json({ status: "success", payload: carts });
+	} catch (error) {
+		res
+			.status(error.code || 500)
+			.json({ status: "error", message: error.message });
+	}
+});
+
+// Ruta para obtener un carrito específico por su ID
+router.get("/:id", async (req, res) => {
+	try {
+		const cart = await cartManager.getOneById(req.params.id);
+		res.status(200).json({ status: "success", payload: cart });
+	} catch (error) {
+		res
+			.status(error.code || 500)
+			.json({ status: "error", message: error.message });
+	}
+});
+
+// Ruta para crear un nuevo carrito
 router.post("/", async (req, res) => {
 	try {
-		const data = await fs.readFile(carritosPath, "utf-8");
-		const carritos = JSON.parse(data);
-
-		const nuevoCarrito = {
-			id: (carritos.length
-				? Math.max(carritos.map((c) => c.id)) + 1
-				: 1
-			).toString(), // Autogenera el ID
-			products: [], // Inicializa un array vacío de productos
-		};
-
-		carritos.push(nuevoCarrito);
-
-		await fs.writeFile(carritosPath, JSON.stringify(carritos, null, 2));
-		res.status(201).json(nuevoCarrito);
+		const cart = await cartManager.insertOne(req.body);
+		res.status(201).json({ status: "success", payload: cart });
 	} catch (error) {
-		res.status(500).send("Error al crear el carrito.");
+		res
+			.status(error.code || 500)
+			.json({ status: "error", message: error.message });
 	}
 });
 
-//Ruta GET/api/carts para listar productos de un carrito en especifico
-router.get("/:cid", async (req, res) => {
-	const { cid } = req.params;
-
+// Ruta para añadir un producto a un carrito específico por su ID
+router.post("/:cid/products/:pid", async (req, res) => {
 	try {
-		const data = await fs.readFile(carritosPath, "utf-8");
-		const carritos = JSON.parse(data);
-
-		const carrito = carritos.find((c) => c.id === cid);
-		if (!carrito) {
-			return res.status(404).json({ error: "Carrito no encontrado." });
-		}
-
-		res.json(carrito.products);
+		const { cid, pid } = req.params;
+		const { quantity } = req.body;
+		const cart = await cartManager.addProductToCart(cid, pid, quantity || 1);
+		res.status(200).json({ status: "success", payload: cart });
 	} catch (error) {
-		res.status(500).send("Error al obtener los productos del carrito.");
+		res
+			.status(error.code || 500)
+			.json({ status: "error", message: error.message });
 	}
 });
 
-//Ruta POST/api/carts/product para agregar un producto al carrito
-router.post("/:cid/product/:pid", async (req, res) => {
-	const { cid, pid } = req.params;
-
+// Ruta para eliminar un producto de un carrito específico por su ID
+router.delete("/:cid/products/:pid", async (req, res) => {
 	try {
-		const data = await fs.readFile(carritosPath, "utf-8");
-		const carritos = JSON.parse(data);
-
-		const carrito = carritos.find((c) => c.id === cid);
-		if (!carrito) {
-			return res.status(404).json({ error: "Carrito no encontrado." });
-		}
-
-		const productoExistente = carrito.products.find((p) => p.product === pid);
-
-		if (productoExistente) {
-			productoExistente.quantity += 1;
-		} else {
-			carrito.products.push({ product: pid, quantity: 1 });
-		}
-
-		await fs.writeFile(carritosPath, JSON.stringify(carritos, null, 2));
-		res.status(200).json(carrito);
+		const { cid, pid } = req.params;
+		const cart = await cartManager.removeProductFromCart(cid, pid);
+		res.status(200).json({ status: "success", payload: cart });
 	} catch (error) {
-		res.status(500).send("Error al agregar el producto al carrito.");
+		res
+			.status(error.code || 500)
+			.json({ status: "error", message: error.message });
 	}
 });
 
-module.exports = router; //para que app.js pueda usar las rutas creadas
+export default router;

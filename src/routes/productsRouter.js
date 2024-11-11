@@ -1,120 +1,66 @@
 import { Router } from "express";
-import ProductManager from "../manager/ProductManager.js";
+import ProductManager from "../manager/productManager.js";
 
-const productosPath = "./files/productos.json"; // Ruta al archivo de productos
+const router = Router();
+const productManager = new ProductManager();
 
-// Función para obtener el próximo ID único
-async function obtenerNuevoId() {
-	const data = await fs.readFile(productosPath, "utf-8");
-	const productos = JSON.parse(data);
+// Ruta para obtener todos los productos
+router.get("/", async (req, res) => {
+	try {
+		const products = await productManager.getAll(req.query);
+		res.status(200).json({ status: "success", payload: products });
+	} catch (error) {
+		res
+			.status(error.code || 500)
+			.json({ status: "error", message: error.message });
+	}
+});
 
-	// Encontrar el ID máximo en el archivo y sumar 1
-	const maxId = productos.reduce(
-		(max, product) => Math.max(max, parseInt(product.id)),
-		0
-	);
-	return (maxId + 1).toString(); // Convertimos a string para mantener consistencia
-}
+// Ruta para obtener un producto por su ID
+router.get("/:id", async (req, res) => {
+	try {
+		const product = await productManager.getOneById(req.params.id);
+		res.status(200).json({ status: "success", payload: product });
+	} catch (error) {
+		res
+			.status(error.code || 500)
+			.json({ status: "error", message: error.message });
+	}
+});
 
-// Ruta POST / para agregar un nuevo producto
+// Ruta para crear un nuevo producto
 router.post("/", async (req, res) => {
-	const {
-		title,
-		description,
-		status = true,
-		stock,
-		category,
-		thumbnails = [],
-		code,
-		price,
-	} = req.body;
-
-	// Verificar campos obligatorios
-	if (!title || !description || !stock || !category || !code || !price) {
-		return res.status(400).json({
-			error: "Todos los campos son obligatorios, excepto thumbnails.",
-		});
-	}
-
 	try {
-		// Generar un nuevo ID único
-		const newId = await obtenerNuevoId();
-
-		// Crear el nuevo producto
-		const nuevoProducto = {
-			id: newId,
-			title,
-			description,
-			status,
-			stock,
-			category,
-			thumbnails,
-			code,
-			price,
-		};
-
-		// Leer el archivo, añadir el nuevo producto y guardar los cambios
-		const data = await fs.readFile(productosPath, "utf-8");
-		const productos = JSON.parse(data);
-		productos.push(nuevoProducto);
-
-		await fs.writeFile(productosPath, JSON.stringify(productos, null, 2));
-		res.status(201).json(nuevoProducto);
+		const product = await productManager.insertOne(req.body);
+		res.status(201).json({ status: "success", payload: product });
 	} catch (error) {
-		res.status(500).send("Error al guardar el producto.");
+		res
+			.status(error.code || 500)
+			.json({ status: "error", message: error.message });
 	}
 });
 
-// Ruta PUT /:pid para actualizar un producto existente
-router.put("/:pid", async (req, res) => {
-	const { pid } = req.params;
-	const updatedFields = req.body;
-
+// Ruta para actualizar un producto por su ID
+router.put("/:id", async (req, res) => {
 	try {
-		const data = await fs.readFile(productosPath, "utf-8");
-		const productos = JSON.parse(data);
-
-		const productIndex = productos.findIndex((p) => p.id === pid);
-		if (productIndex === -1) {
-			return res.status(404).json({ error: "Producto no encontrado." });
-		}
-
-		delete updatedFields.id;
-
-		productos[productIndex] = { ...productos[productIndex], ...updatedFields };
-
-		await fs.writeFile(productosPath, JSON.stringify(productos, null, 2));
-		res.json(productos[productIndex]);
+		const product = await productManager.updateOneById(req.params.id, req.body);
+		res.status(200).json({ status: "success", payload: product });
 	} catch (error) {
-		res.status(500).send("Error al actualizar el producto.");
+		res
+			.status(error.code || 500)
+			.json({ status: "error", message: error.message });
 	}
 });
 
-// Ruta DELETE /:pid para eliminar un producto por ID
-router.delete("/:pid", async (req, res) => {
-	const { pid } = req.params;
-
+// Ruta para eliminar un producto por su ID
+router.delete("/:id", async (req, res) => {
 	try {
-		// Leer el archivo de productos
-		const data = await fs.readFile(productosPath, "utf-8");
-		const productos = JSON.parse(data);
-
-		// Filtrar los productos para excluir el producto con el pid dado
-		const productosFiltrados = productos.filter((p) => p.id !== pid);
-
-		// Verificar si el producto existía
-		if (productos.length === productosFiltrados.length) {
-			return res.status(404).json({ error: "Producto no encontrado." });
-		}
-
-		// Guardar el nuevo array de productos sin el producto eliminado
-		await fs.writeFile(
-			productosPath,
-			JSON.stringify(productosFiltrados, null, 2)
-		);
-		res.status(200).json({ message: "Producto eliminado exitosamente." });
+		await productManager.deleteOneById(req.params.id);
+		res.status(200).json({ status: "success" });
 	} catch (error) {
-		res.status(500).send("Error al eliminar el producto.");
+		res
+			.status(error.code || 500)
+			.json({ status: "error", message: error.message });
 	}
 });
 

@@ -2,7 +2,7 @@
 	"name": "pazencia",
 	"version": "1.0.0",
 	"description": "X",
-	"main": "src/app.js",
+	"main": "app.js",
 	"type": "module",
 	"scripts": {
 		"start": "node --no-warnings ./src/app.js",
