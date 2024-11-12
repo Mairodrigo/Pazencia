@@ -1,1 +1,32 @@
-[]
+[
+	{
+		"id": 1,
+		"title": "Sahumerios sagrada madre",
+		"description": "60 minutos de duración",
+		"price": 3000,
+		"status": "true",
+		"stock": 20,
+		"category": "Sahumerios",
+		"thumbnails": ""
+	},
+	{
+		"id": 2,
+		"title": "Sahumerios OHM",
+		"description": "90 minutos de duración",
+		"price": 4000,
+		"status": "true",
+		"stock": 10,
+		"category": "Sahumerios",
+		"thumbnails": ""
+	},
+        {
+					"id": 3,
+					"title": "Bombitas sagrada madre",
+					"description": "10 minutos de duración",
+					"price": 3000,
+					"status": "true",
+					"stock": 10,
+					"category": "Bombitas",
+					"thumbnails": ""
+				}
+]

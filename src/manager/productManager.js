@@ -8,12 +8,12 @@ import { generateId } from "../utils/collectionHandler.js";
 import { convertToBoolean } from "../utils/converter.js";
 import ErrorManager from "./errorManager.js";
 
-export default class ProductManager {
+class ProductManager {
 	#jsonFilename;
 	#products;
 
 	constructor() {
-		this.#jsonFilename = "productos.json";
+		this.#jsonFilename = "products.json";
 	}
 
 	// Busca un producto por su ID
@@ -131,3 +131,4 @@ export default class ProductManager {
 		}
 	}
 }
+export default ProductManager;

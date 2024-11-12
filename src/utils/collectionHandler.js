@@ -1,20 +1,17 @@
-// Genera un nuevo ID incrementando el ID máximo actual o asignando 1 si la colección está vacía
+// Genera ID incrementando el ID máximo actual
 export const generateId = (collection) => {
-	// Verifica si la colección es un array
+	console.log(collection);
+
 	if (!Array.isArray(collection)) {
 		throw new Error("Colección no válida");
 	}
 
-	// Si la colección está vacía, devuelve 1
-	if (collection.length === 0) {
-		return 1;
-	}
-
-	// Encuentra el ID máximo de los elementos en la colección
-	const maxId = collection.reduce(
-		(max, item) => (item.id > max ? item.id : max),
-		0
-	);
+	let maxId = 0;
+	collection.forEach((item) => {
+		if (item.id > maxId) {
+			maxId = item.id;
+		}
+	});
 
 	return maxId + 1;
 };

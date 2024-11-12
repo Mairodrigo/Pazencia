@@ -1,6 +1,6 @@
 import express from "express";
 
-// Importación de enrutadores
+// Importar enrutadores
 import productsRouter from "./src/routes/productsRouter.js";
 import cartRouter from "./src/routes/cartRouter.js";
 
@@ -10,9 +10,6 @@ const app = express();
 // Se define el puerto en el que el servidor escuchará las solicitudes
 const PORT = 8080;
 
-// Middleware para acceder al contenido de formularios codificados en URL
-app.use(express.urlencoded({ extended: true }));
-
 // Middleware para acceder al contenido JSON de las solicitudes
 app.use(express.json());
 
@@ -20,10 +17,10 @@ app.use(express.json());
 app.use("/api/products", productsRouter);
 app.use("/api/carts", cartRouter);
 
-// Ruta raíz para mensaje de bienvenida
+// Ruta raíz con mensaje de bienvenida
 app.get("/", (req, res) => {
 	res.send(
-		"Bienvenido a la API de Pazencia. Usa /api/products o /api/carts para acceder a los datos."
+		"Bienvenido a la API de Pazencia. Utilice /api/products o /api/carts para acceder a los datos."
 	);
 });
 
