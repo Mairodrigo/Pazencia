@@ -8,7 +8,7 @@ import { generateId } from "../utils/collectionHandler.js";
 import { convertToBoolean } from "../utils/converter.js";
 import ErrorManager from "./errorManager.js";
 
-class ProductManager {
+export default class ProductManager {
 	#jsonFilename;
 	#products;
 
@@ -131,4 +131,3 @@ class ProductManager {
 		}
 	}
 }
-export default ProductManager;
