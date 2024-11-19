@@ -1,30 +1,32 @@
+//Framework para desarrollar el servidor: Express
 import express from "express";
 
 // Importar enrutadores
 import productsRouter from "./routes/productsRouter.js";
 import cartRouter from "./routes/cartRouter.js";
 
-// Se crea una instancia de la aplicación Express
+// Llamado a la función de instanciación de express
 const app = express();
 
-// Se define el puerto en el que el servidor escuchará las solicitudes
+// Puerto en el que el servidor escuchará las request
 const PORT = 8080;
 
-// Middleware para acceder al contenido JSON de las solicitudes
+// Middleware para acceder al contenido JSON de las request
 app.use(express.json());
 
 // Declaración de rutas para los productos y carritos
 app.use("/api/products", productsRouter);
 app.use("/api/carts", cartRouter);
 
-// Ruta raíz con mensaje de bienvenida
+// Endpoint raíz
 app.get("/", (req, res) => {
+	//Mensaje de bienvenida e instrucciones
 	res.send(
 		"Bienvenido a la API de Pazencia. Utilice /api/products o /api/carts para acceder a los datos."
 	);
 });
 
-// Se levanta el servidor oyendo en el puerto solicitado
+// Levanto el servidor en puerto 8080
 app.listen(PORT, () => {
 	console.log(`Servidor ejecutandose en http://localhost:${PORT}`);
 });
