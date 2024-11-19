@@ -16,19 +16,20 @@ export default class ProductManager {
 		this.#jsonFilename = "products.json";
 	}
 
-	// Busca un producto por su ID
+// Buscar un producto por su ID
 	async #findOneById(id) {
 		this.#products = await this.getAll();
+		//Traer el producto elegido mediante el id desde la request. Transformar el string recibido en number.
 		const productFound = this.#products.find((item) => item.id === Number(id));
-
+		//Condicion de escape si no encuentra el producto, error 404
 		if (!productFound) {
 			throw new ErrorManager("ID de producto no encontrado", 404);
 		}
-
+		
 		return productFound;
 	}
 
-	// Obtiene una lista de productos
+	// Obtiene lista de productos
 	async getAll() {
 		try {
 			this.#products = await readJsonFile(paths.files, this.#jsonFilename);
