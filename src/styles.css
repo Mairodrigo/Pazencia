@@ -1,0 +1,115 @@
+/* General Reset */
+* {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+}
+
+/* Cuerpo de la página */
+body {
+	font-family: "Arial", sans-serif;
+	background-color: #f5f9f6; /* Verde muy claro */
+	color: #4a4a4a; /* Gris cálido para el texto */
+	line-height: 1.6;
+	margin: 0;
+	padding: 0;
+}
+
+/* Encabezado */
+header {
+	background-color: #d4e9e2; /* Verde pastel */
+	color: #2c3e50; /* Azul grisáceo */
+	text-align: center;
+	padding: 2rem 0; /* Medidas responsivas */
+	box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.1);
+}
+
+header h1 {
+	font-size: 2rem;
+	margin-bottom: 0.5rem;
+}
+
+header p {
+	font-size: 1rem;
+	margin: 0;
+}
+
+/* Contenedores */
+.container {
+	width: 90%;
+	max-width: 75rem; /* 1200px equivalente */
+	margin: 1.5rem auto;
+}
+
+/* Botones */
+button {
+	background-color: #6abfbd; /* Turquesa suave */
+	color: #ffffff;
+	border: none;
+	padding: 0.625rem 1.25rem; /* 10px 20px equivalente */
+	border-radius: 0.3125rem; /* 5px equivalente */
+	font-size: 1rem;
+	cursor: pointer;
+	transition: background-color 0.3s ease;
+}
+
+button:hover {
+	background-color: #549f9d; /* Turquesa más oscuro */
+}
+
+/* Listas de productos */
+.products-list,
+.real-time-products-list {
+	list-style: none;
+	display: grid;
+	grid-template-columns: repeat(
+		auto-fit,
+		minmax(18.75rem, 1fr)
+	); /* 300px mínimo */
+	gap: 1.25rem; /* 20px equivalente */
+	padding: 0;
+}
+
+.products-list li,
+.real-time-products-list li {
+	background-color: #ffffff;
+	border: 0.0625rem solid #e0e0e0; /* 1px equivalente */
+	border-radius: 0.5rem; /* 8px equivalente */
+	padding: 1rem;
+	box-shadow: 0 0.125rem 0.3125rem rgba(0, 0, 0, 0.1); /* 2px 5px */
+	text-align: center;
+}
+
+.products-list li:hover,
+.real-time-products-list li:hover {
+	box-shadow: 0 0.25rem 0.625rem rgba(0, 0, 0, 0.15); /* 4px 10px */
+}
+
+.products-list li h2,
+.real-time-products-list li h2 {
+	font-size: 1.25rem;
+	color: #2c3e50;
+	margin-bottom: 0.625rem; /* 10px equivalente */
+}
+
+.products-list li p,
+.real-time-products-list li p {
+	font-size: 1rem;
+	color: #6c757d;
+}
+
+/* Footer */
+footer {
+	background-color: #d4e9e2;
+	color: #4a4a4a;
+	text-align: center;
+	padding: 0.625rem 0; 
+	position: relative;
+	bottom: 0;
+	width: 100%;
+}
+
+footer p {
+	margin: 0;
+	font-size: 0.9rem;
+}
